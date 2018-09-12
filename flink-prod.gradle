@@ -1,0 +1,6 @@
+apply from: 'libs.gradle'
+
+dependencies {
+    compileOnly group: 'org.apache.flink', name: 'flink-java', version: "${libs.flink}"
+    compileOnly group: 'org.apache.flink', name: "flink-streaming-java_${libs.scala}", version: "${libs.flink}"
+}

@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+group 'flink-playground'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+mainClassName = 'com.mic.flink.FlinkMain'
+
+repositories {
+    mavenCentral()
+}
+
+apply from: 'libs.gradle'
+
+if (project.hasProperty('prod')) {
+    apply from: rootProject.file('flink-prod.gradle')
+}
+else if (project.hasProperty('dev')) {
+    apply from: rootProject.file('flink-dev.gradle')
+}
+else {
+    throw new IllegalArgumentException("Cannot compile without profile definition, please choose ('prod', 'dev')")
+}
+
+dependencies {
+    compile(group: 'org.apache.hadoop', name: 'hadoop-client', version: "${libs.hadoop}") {
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+    }
+
+    compile(group: 'org.elasticsearch', name: 'elasticsearch-hadoop', version: "${libs.elasticsearch}") {
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+    }
+
+    compile group: 'org.apache.flink', name: "flink-hadoop-compatibility_${libs.scala}", version: "${libs.flink}"
+
+    runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: "${libs.slf4j_log4j12}"
+    runtime group: 'log4j', name: 'log4j', version: "${libs.log4j}"
+
+    testCompile group: 'junit', name: 'junit', version: "${libs.junit}"
+}
+
+shadowJar {
+    baseName = 'shadow'
+    classifier = null
+    version = null
+
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+
+    dependencies {
+        exclude(dependency('org.apache.flink:force-shading'))
+        exclude(dependency('com.google.code.findbugs:jsr305'))
+        exclude(dependency('org.slf4j:*'))
+        exclude(dependency('log4j:*'))
+    }
+
+
+}

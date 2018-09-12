@@ -1,0 +1,9 @@
+project.ext.libs = [
+        "flink": "1.6.0",
+        "scala": "2.11",
+        "slf4j_log4j12": "1.7.7",
+        "log4j": "1.2.17",
+        "junit": "4.12",
+        "elasticsearch": "5.4.3",
+        "hadoop": "2.7.0"
+]
