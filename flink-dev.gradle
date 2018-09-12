@@ -2,7 +2,5 @@ apply from: 'libs.gradle'
 
 dependencies {
     compile group: 'org.apache.flink', name: 'flink-java', version: "${libs.flink}"
-    compile group: 'org.apache.flink', name: "flink-scala_${libs.scala}", version: "${libs.flink}"
     compile group: 'org.apache.flink', name: "flink-streaming-java_${libs.scala}", version: "${libs.flink}"
-
 }
